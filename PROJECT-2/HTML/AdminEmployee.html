@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script>
+        async function getEmployees() {
+            try {
+                const response = await fetch('http://localhost:3000/employee');
+                const data = await response.json();
+                setEmployees(data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function addEmployee(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const user_password = document.getElementById('user_password').value;
+            try {
+                const body = { username, user_password };
+                const response = await fetch('http://localhost:3000/employee', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const newEmployee = await response.json();
+                addEmployeeToTable(newEmployee);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function deleteEmployee(username) {
+            try {
+                await fetch(`http://localhost:3000/employee/${username}`, {
+                    method: 'DELETE'
+                });
+                removeEmployeeFromTable(username);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        function setEmployees(employees) {
+            const tbody = document.getElementById('employeeTableBody');
+            tbody.innerHTML = '';
+            employees.forEach((employee, index) => {
+                tbody.innerHTML += `
+                    <tr id="employee-${employee.username}">
+                        <td>${index + 1}</td>
+                        <td>${employee.username}</td>
+                        <td><button class="btn btn-danger" onclick="deleteEmployee('${employee.username}')">Delete</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function addEmployeeToTable(employee) {
+            const tbody = document.getElementById('employeeTableBody');
+            const index = tbody.rows.length;
+            tbody.innerHTML += `
+                <tr id="employee-${employee.username}">
+                    <td>${index + 1}</td>
+                    <td>${employee.username}</td>
+                    <td><button class="btn btn-danger" onclick="deleteEmployee('${employee.username}')">Delete</button></td>
+                </tr>
+            `;
+        }
+
+        function removeEmployeeFromTable(username) {
+            const row = document.getElementById(`employee-${username}`);
+            row.parentNode.removeChild(row);
+        }
+
+        window.onload = function() {
+            getEmployees();
+        };
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <form class="mt-5 jumbotron" onsubmit="addEmployee(event)">
+            <h1>Add Employee</h1>
+            <hr>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" id="username" required>
+                <label>Password</label>
+                <input type="text" class="form-control" id="user_password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        
+        <div class="container p-3">
+            <h1 style="text-align: center">All Employees</h1>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <!-- Employee rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

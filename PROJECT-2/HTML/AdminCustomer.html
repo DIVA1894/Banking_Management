@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script>
+        async function getCustomers() {
+            try {
+                const response = await fetch('http://localhost:3000/customer');
+                const data = await response.json();
+                setCustomers(data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function postCustomer(event) {
+            event.preventDefault();
+            const name = document.getElementById('customerName').value;
+            const phone = document.getElementById('customerPhone').value;
+            const email = document.getElementById('customerEmail').value;
+            const house_no = document.getElementById('customerHouseNo').value;
+            const city = document.getElementById('customerCity').value;
+            const zipcode = document.getElementById('customerZipcode').value;
+            const username = document.getElementById('customerUsername').value;
+            const password = document.getElementById('customerPassword').value;
+            try {
+                const body = { name, phone, email, house_no, city, zipcode, username, password };
+                const response = await fetch('http://localhost:3000/customer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const newCustomer = await response.json();
+                addCustomerToTable(newCustomer);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function deleteCustomer(customer_id) {
+            try {
+                await fetch(`http://localhost:3000/customer/${customer_id}`, {
+                    method: 'DELETE'
+                });
+                removeCustomerFromTable(customer_id);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        function setCustomers(customers) {
+            const tbody = document.getElementById('customerTableBody');
+            tbody.innerHTML = '';
+            customers.forEach(customer => {
+                tbody.innerHTML += `
+                    <tr id="customer-${customer.customer_id}">
+                        <td>${customer.customer_id}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.phone}</td>
+                        <td>${customer.email}</td>
+                        <td>${customer.house_no}</td>
+                        <td>${customer.city}</td>
+                        <td>${customer.zipcode}</td>
+                        <td>${customer.username}</td>
+                        <td><button class="btn btn-danger" onclick="deleteCustomer(${customer.customer_id})">Delete</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function addCustomerToTable(customer) {
+            const tbody = document.getElementById('customerTableBody');
+            tbody.innerHTML += `
+                <tr id="customer-${customer.customer_id}">
+                    <td>${customer.customer_id}</td>
+                    <td>${customer.name}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.house_no}</td>
+                    <td>${customer.city}</td>
+                    <td>${customer.zipcode}</td>
+                    <td>${customer.username}</td>
+                    <td><button class="btn btn-danger" onclick="deleteCustomer(${customer.customer_id})">Delete</button></td>
+                </tr>
+            `;
+        }
+
+        function removeCustomerFromTable(customer_id) {
+            const row = document.getElementById(`customer-${customer_id}`);
+            row.parentNode.removeChild(row);
+        }
+
+        window.onload = function() {
+            getCustomers();
+        };
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <button class="btn btn-lg btn-outline-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Add Customer
+        </button>
+        
+        <div class="collapse" id="collapseExample">
+            <form class="container border p-5 mt-5" onsubmit="postCustomer(event)">
+                <h1>Add Customer</h1>
+                <hr>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="customerName" required>
+                    <label>Phone</label>
+                    <input type="text" class="form-control" id="customerPhone">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="customerEmail" required>
+                    <label>House No.</label>
+                    <input type="text" class="form-control" id="customerHouseNo">
+                    <label>City</label>
+                    <input type="text" class="form-control" id="customerCity" required>
+                    <label>Zip Code</label>
+                    <input type="text" class="form-control" id="customerZipcode">
+                    <label>Username</label>
+                    <input type="text" class="form-control" id="customerUsername" required>
+                    <label>Password</label>
+                    <input type="text" class="form-control" id="customerPassword">
+                </div>
+                <button type="submit" class="btn-lg btn-primary">Add</button>
+            </form>
+        </div>
+        <hr>
+        <div class="p-5">
+            <h1 style="text-align: center">All Customers</h1>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">House No</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Zip Code</th>
+                        <th scope="col">Username</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="customerTableBody">
+                    <!-- Customer rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+        <hr>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

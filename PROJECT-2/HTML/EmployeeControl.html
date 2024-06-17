@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      margin-top: 4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 5rem;
+    }
+
+    .card img {
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <h1 class="text-center">Admin Control</h1>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <div class="card text-black bg-white mt-3 shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="">
+                  <h3 class="float-left">Customer</h3>
+                  <button class="btn btn-outline-danger float-right" id="edit-customer">Edit</button>
+                </div>
+                <div class="card-body pd-5">
+                  <img src="/customer.png" alt="customer not found" class="rounded mx-auto d-block mt-4">
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="card text-black bg-white mt-3 shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="">
+                  <h3 class="float-left">Branch</h3>
+                  <button class="btn btn-outline-warning float-right" id="edit-branch">Edit</button>
+                </div>
+                <div class="card-body pd-5">
+                  <img src="/branch.png" alt="branch not found" class="rounded mx-auto d-block mt-4">
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="card text-black bg-white mt-3 shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="">
+                  <h3 class="float-left">Employee</h3>
+                  <button class="btn btn-outline-warning float-right" id="edit-employee">Edit</button>
+                </div>
+                <div class="card-body pd-5">
+                  <img src="/employee.png" alt="employee not found" class="rounded mx-auto d-block mt-4">
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('edit-customer').addEventListener('click', () => {
+        window.location.href = '/admin/customer';
+      });
+      document.getElementById('edit-employee').addEventListener('click', () => {
+        window.location.href = '/admin/employee';
+      });
+      document.getElementById('edit-branch').addEventListener('click', () => {
+        window.location.href = '/admin/branch';
+      });
+    });
+  </script>
+</body>
+</html>

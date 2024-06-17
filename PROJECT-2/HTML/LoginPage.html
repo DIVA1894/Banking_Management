@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bank Management System</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      background-color: #edf2f4;
+      padding: 5rem;
+    }
+
+    .card img {
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4">Welcome to Bank Management System!!</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card shadow-lg mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Customer</h3>
+            <button class="btn btn-outline-success" id="customer-login">Login</button>
+          </div>
+          <div class="card-body">
+            <img src="customer.png" alt="customer not found" class="rounded mx-auto d-block">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card shadow-lg mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Employee</h3>
+            <button class="btn btn-outline-success" id="employee-login">Login</button>
+          </div>
+          <div class="card-body">
+            <img src="employee.png" alt="employee not found" class="rounded mx-auto d-block">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const customerLoginButton = document.getElementById('customer-login');
+      const employeeLoginButton = document.getElementById('employee-login');
+
+      customerLoginButton.addEventListener('click', () => {
+        window.location.href = '/customer/login';
+      });
+
+      employeeLoginButton.addEventListener('click', () => {
+        window.location.href = '/employee/login';
+      });
+    });
+  </script>
+</body>
+</html>

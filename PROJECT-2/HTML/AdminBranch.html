@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script>
+        async function getBranches() {
+            try {
+                const response = await fetch('http://localhost:3000/branch');
+                const data = await response.json();
+                setBranches(data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function postBranch(event) {
+            event.preventDefault();
+            const name = document.getElementById('branchName').value;
+            const house_no = document.getElementById('branchHouseNo').value;
+            const city = document.getElementById('branchCity').value;
+            const zip_code = document.getElementById('branchZipCode').value;
+            try {
+                const body = { name, house_no, city, zip_code };
+                const response = await fetch('http://localhost:3000/branch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const newBranch = await response.json();
+                addBranchToTable(newBranch);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        async function deleteBranch(branch_id) {
+            try {
+                await fetch(`http://localhost:3000/branch/${branch_id}`, {
+                    method: 'DELETE'
+                });
+                removeBranchFromTable(branch_id);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+
+        function setBranches(branches) {
+            const tbody = document.getElementById('branchTableBody');
+            tbody.innerHTML = '';
+            branches.forEach(branch => {
+                tbody.innerHTML += `
+                    <tr id="branch-${branch.branch_id}">
+                        <td>${branch.branch_id}</td>
+                        <td>${branch.name}</td>
+                        <td>${branch.house_no}</td>
+                        <td>${branch.city}</td>
+                        <td>${branch.zip_code}</td>
+                        <td><button class="btn btn-danger" onclick="deleteBranch(${branch.branch_id})">Delete</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function addBranchToTable(branch) {
+            const tbody = document.getElementById('branchTableBody');
+            tbody.innerHTML += `
+                <tr id="branch-${branch.branch_id}">
+                    <td>${branch.branch_id}</td>
+                    <td>${branch.name}</td>
+                    <td>${branch.house_no}</td>
+                    <td>${branch.city}</td>
+                    <td>${branch.zip_code}</td>
+                    <td><button class="btn btn-danger" onclick="deleteBranch(${branch.branch_id})">Delete</button></td>
+                </tr>
+            `;
+        }
+
+        function removeBranchFromTable(branch_id) {
+            const row = document.getElementById(`branch-${branch_id}`);
+            row.parentNode.removeChild(row);
+        }
+
+        window.onload = function() {
+            getBranches();
+        };
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <button class="btn btn-lg btn-outline-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Add Branch
+        </button>
+        
+        <div class="collapse" id="collapseExample">
+            <form class="container border p-5 mt-5" onsubmit="postBranch(event)">
+                <h1>Add Branch</h1>
+                <hr>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="branchName" required>
+                    <label>House No.</label>
+                    <input type="text" class="form-control" id="branchHouseNo">
+                    <label>City</label>
+                    <input type="text" class="form-control" id="branchCity" required>
+                    <label>Zip Code</label>
+                    <input type="text" class="form-control" id="branchZipCode">
+                </div>
+                <button type="submit" class="btn-lg btn-primary">Add</button>
+            </form>
+        </div>
+        <hr>
+        <div class="p-5">
+            <h1 style="text-align: center">All Branches</h1>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Branch Name</th>
+                        <th scope="col">House No</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Zip Code</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="branchTableBody">
+                    <!-- Branch rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+        <hr>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

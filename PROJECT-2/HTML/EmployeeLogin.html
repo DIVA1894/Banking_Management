@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Login</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      margin-top: 5rem;
+    }
+
+    .form-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      padding: 3rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+    }
+
+    .form-container img {
+      height: 400px;
+      margin-right: 2rem;
+    }
+
+    .form-container form {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1 class="text-center mt-5 mb-5">Employee Login</h1>
+    <div class="container border form-container">
+      <img src="/employee.png" alt="employee missing" class="rounded">
+      <form id="employee-login-form" action="http://localhost:3000/employeepage" method="get">
+        <div class="form-group">
+          <label for="username" class="mt-4">Username</label>
+          <input type="text" class="form-control mb-3" id="username" name="username" required>
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg mt-3">Login</button>
+      </form>
+    </div>
+  </div>
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('employee-login-form');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent default form submission
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const body = { username, password };
+        console.log(body); // Displaying the body object in the console
+        form.submit(); // Submitting the form
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Control</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #006d77;
+      color: #e5e5e5;
+    }
+    .card img {
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="border p-5" style="background-color: #006d77;">
+      <h1 class="mt-5 text-center" style="color: #e5e5e5;">Customer Details</h1>
+      <hr style="color: #FFFFFF;">
+      <img src="avatar.png" alt="missing avatar" class="rounded mx-auto d-block">
+      <h3 class="mt-5 text-center" id="username-display"></h3>
+    </div>
+    <div class="container border mt-5 pt-5 pb-5 bg-white text-dark">
+      <h2>Personal Details</h2>
+      <div class="input-group mb-3 mt-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">customerid@</span>
+        </div>
+        <input type="text" id="customer-id" class="form-control" placeholder="id" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">name@</span>
+        </div>
+        <input type="text" id="customer-name" class="form-control" placeholder="Name" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">phone@</span>
+        </div>
+        <input type="text" id="customer-phone" class="form-control" placeholder="Phone" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">email@</span>
+        </div>
+        <input type="text" id="customer-email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">house@</span>
+        </div>
+        <input type="text" id="customer-house" class="form-control" placeholder="House No" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">city@</span>
+        </div>
+        <input type="text" id="customer-city" class="form-control" placeholder="City" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">zipcode@</span>
+        </div>
+        <input type="text" id="customer-zipcode" class="form-control" placeholder="Zipcode" aria-label="Username" aria-describedby="basic-addon1" readonly>
+      </div>
+      <hr>
+      <button class="btn btn-outline-info" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Create Account</button>
+      <button class="btn btn-outline-primary ml-3" type="button" data-toggle="collapse" data-target="#AccountDetails" aria-expanded="false" aria-controls="collapseExample" id="get-account-details">Get Account Details</button>
+      <button class="btn btn-success ml-3" type="button" data-toggle="collapse" data-target="#alltransaction" aria-expanded="false" aria-controls="collapseExample" id="get-transactions">View Transactions</button>
+      <div class="collapse" id="collapseExample">
+        <div class="form-group shadow p-3 mb-5 bg-white rounded mt-3">
+          <label>Customer Id</label>
+          <input type="text" class="form-control mb-3" id="customer_id_value" name="username" disabled required>
+          <label>Balance</label>
+          <input type="text" class="form-control" id="balance" required>
+          <button class="btn btn-primary btn-lg mt-3" id="add-account">Add</button>
+        </div>
+      </div>
+      <div class="collapse" id="alltransaction">
+        <div class="card card-body">
+          Your Transactions
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Account ID</th>
+                <th scope="col">Action</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Branch ID</th>
+                <th scope="col">Date of Transaction</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="accounts-container"></div>
+    </div>
+  </div>
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    const baseURL = 'http://localhost:3000';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const customerIDInput = document.getElementById('customer-id');
+      const customerNameInput = document.getElementById('customer-name');
+      const customerPhoneInput = document.getElementById('customer-phone');
+      const customerEmailInput = document.getElementById('customer-email');
+      const customerHouseInput = document.getElementById('customer-house');
+      const customerCityInput = document.getElementById('customer-city');
+      const customerZipcodeInput = document.getElementById('customer-zipcode');
+      const usernameDisplay = document.getElementById('username-display');
+      const accountsContainer = document.getElementById('accounts-container');
+      const transactionsTableBody = document.getElementById('transactions-table-body');
+
+      async function fetchCustomerDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        const response = await fetch(`${baseURL}/customer/${username}`);
+        const data = await response.json();
+        customerIDInput.value = data.customer_id;
+        customerNameInput.value = data.name;
+        customerPhoneInput.value = data.phone;
+        customerEmailInput.value = data.email;
+        customerHouseInput.value = data.house_no;
+        customerCityInput.value = data.city;
+        customerZipcodeInput.value = data.zipcode;
+        usernameDisplay.textContent = `username@${data.username}`;
+      }
+
+      async function fetchAccountDetails() {
+        const customerID = customerIDInput.value;
+        const response = await fetch(`${baseURL}/accounts/${customerID}`);
+        const data = await response.json();
+        accountsContainer.innerHTML = '';
+        data.forEach((account, index) => {
+          const accountCard = document.createElement('div');
+          accountCard.className = 'card shadow-lg p-3 mb-5 bg-white rounded collapse show';
+          accountCard.id = 'AccountDetails';
+          accountCard.innerHTML = `
+            <hr class="mt-5">
+            <h1 style="text-align: left;">Savings Account</h1>
+            <hr>
+            <div class="card-header">
+              Account #${index + 1}
+            </div>
+            <div class="card-body">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon3">@account no</span>
+                </div>
+                <input type="text" value="${account.account_id}" name="account_no" class="form-control" aria-describedby="basic-addon3" readonly>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">₹</span>
+                </div>
+                <input type="text" value="${account.current_balance}" class="form-control" aria-label="Amount" readonly>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Date Opened</span>
+                </div>
+                <input type="text" value="${account.date_opened.substring(0, 10)} ${account.date_opened.substring(11, 16)}" class="form-control" aria-label="Date Opened" readonly>
+              </div>
+              <button class="btn btn-info" type="button">Transaction</button>
+              <button class="btn btn-danger ml-3" type="button" onclick="deleteAccount(${account.account_id})">Delete</button>
+            </div>
+          `;
+          accountsContainer.appendChild(accountCard);
+        });
+      }
+
+      async function fetchTransactions() {
+        const customerID = customerIDInput.value;
+        const response = await fetch(`${baseURL}/transaction/${customerID}`);
+        const data = await response.json();
+        transactionsTableBody.innerHTML = '';
+        data.forEach((transaction) => {
+          const transactionRow = document.createElement('tr');
+          transactionRow.innerHTML = `
+            <td>${transaction.transaction_id}</td>
+            <td>${transaction.account_id}</td>
+            <td>${transaction.action}</td>
+            <td>${transaction.amount}</td>
+            <td>${transaction.branch_id}</td>
+            <td>${transaction.date_of_transaction}</td>
+          `;
+          transactionsTableBody.appendChild(transactionRow);
+        });
+      }
+
+      async function addAccount() {
+        const customerID = customerIDInput.value;
+        const balance = document.getElementById('balance').value;
+        const body = { customer_id: customerID, current_balance: balance };
+        const response = await fetch(`${baseURL}/accounts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        console.log(response);
+        fetchAccountDetails();
+      }
+
+      async function deleteAccount(accountID) {
+        const response = await fetch(`${baseURL}/accounts/${accountID}`, {
+          method: 'DELETE'
+        });
+        console.log(response);
+        fetchAccountDetails();
+      }
+
+      document.getElementById('get-account-details').addEventListener('click', fetchAccountDetails);
+      document.getElementById('get-transactions').addEventListener('click', fetchTransactions);
+      document.getElementById('add-account').addEventListener('click', addAccount);
+
+      fetchCustomerDetails();
+    });
+  </script>
+</body>
+</html>
